@@ -4,14 +4,15 @@
 # siruif@uchicago.edu
 
 
+'''
+This file genderizes people according to their names. The api being used is www.genderize.io
+'''
+
 import requests
 import csv
 import json
 
-
-'''
-This file genderizes people according to their names.
-'''
+# PROBLEM A | PART 2
 
 def get_gender(name):
 

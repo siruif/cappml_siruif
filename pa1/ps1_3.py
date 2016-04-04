@@ -4,14 +4,16 @@
 # siruif@uchicago.edu
 
 
+'''
+This file fills in the missing values of Age, GPA, and Days_missed attributes
+with different methods.
+'''
+
 from ps1_1 import clean_data
 import pandas as pd
 import numpy as np
 
-'''
-This file fills in the missing values of Age, GPA, and Days_missed attributes
-with different measures.
-'''
+# PROBLEM A | PART 3
 
 def fill_with_mean(df, input_data, output_filename, variables):
 

@@ -3,18 +3,15 @@
 # Sirui Feng
 # siruif@uchicago.edu
 
+
 '''
 This file generates summary statistics and plots histograms.
 '''
-
 
 import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
-# variables = ['First_name', 'Last_name', 'State', 'Gender', 'Age', 'GPA',\
-#  'Days_missed', 'Graduated']
 
 # PROBLEM A | PART 1
 
