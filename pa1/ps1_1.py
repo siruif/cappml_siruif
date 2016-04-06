@@ -42,7 +42,7 @@ def get_summary(df, variables):
 
 def plot_histogram(df, var):
 
-	fig = df[var].hist(color = 'pink')
+	fig = df.groupby(var).size().plot.bar()
 	fig.set_title(var + ' Distribution')
 	plt.draw()
 	plt.savefig('output/' + var)
