@@ -1,3 +1,3 @@
-Machine Learning
-Spring 2016
+Machine Learning <br />
+Spring 2016 <br />
 Sirui Feng (siruif@uchicago.edu)
