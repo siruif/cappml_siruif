@@ -130,3 +130,133 @@ Non-missing Value Count: 146076
 Missing Value Count: 3924
 
 
+Correlation Table
+                                             serious_dlqin2yrs  \
+serious_dlqin2yrs                                     1.000000   
+revolving_utilization_of_unsecured_lines             -0.001802   
+age                                                  -0.115386   
+number_of_time30-59_days_past_due_not_worse           0.125587   
+debt_ratio                                           -0.007602   
+monthly_income                                       -0.019746   
+number_of_open_credit_lines_and_loans                -0.029669   
+number_of_times90_days_late                           0.117175   
+number_real_estate_loans_or_lines                    -0.007038   
+number_of_time60-89_days_past_due_not_worse           0.102261   
+number_of_dependents                                  0.046048   
+
+                                             revolving_utilization_of_unsecured_lines  \
+serious_dlqin2yrs                                                           -0.001802   
+revolving_utilization_of_unsecured_lines                                     1.000000   
+age                                                                         -0.005898   
+number_of_time30-59_days_past_due_not_worse                                 -0.001314   
+debt_ratio                                                                   0.003961   
+monthly_income                                                               0.007124   
+number_of_open_credit_lines_and_loans                                       -0.011281   
+number_of_times90_days_late                                                 -0.001061   
+number_real_estate_loans_or_lines                                            0.006235   
+number_of_time60-89_days_past_due_not_worse                                 -0.001048   
+number_of_dependents                                                         0.001557   
+
+                                                  age  \
+serious_dlqin2yrs                           -0.115386   
+revolving_utilization_of_unsecured_lines    -0.005898   
+age                                          1.000000   
+number_of_time30-59_days_past_due_not_worse -0.062995   
+debt_ratio                                   0.024188   
+monthly_income                               0.037717   
+number_of_open_credit_lines_and_loans        0.147705   
+number_of_times90_days_late                 -0.061005   
+number_real_estate_loans_or_lines            0.033150   
+number_of_time60-89_days_past_due_not_worse -0.057159   
+number_of_dependents                        -0.213303   
+
+                                             number_of_time30-59_days_past_due_not_worse  \
+serious_dlqin2yrs                                                               0.125587   
+revolving_utilization_of_unsecured_lines                                       -0.001314   
+age                                                                            -0.062995   
+number_of_time30-59_days_past_due_not_worse                                     1.000000   
+debt_ratio                                                                     -0.006542   
+monthly_income                                                                 -0.010217   
+number_of_open_credit_lines_and_loans                                          -0.055312   
+number_of_times90_days_late                                                     0.983603   
+number_real_estate_loans_or_lines                                              -0.030565   
+number_of_time60-89_days_past_due_not_worse                                     0.987005   
+number_of_dependents                                                           -0.002680   
+
+                                             debt_ratio  monthly_income  \
+serious_dlqin2yrs                             -0.007602       -0.019746   
+revolving_utilization_of_unsecured_lines       0.003961        0.007124   
+age                                            0.024188        0.037717   
+number_of_time30-59_days_past_due_not_worse   -0.006542       -0.010217   
+debt_ratio                                     1.000000       -0.028712   
+monthly_income                                -0.028712        1.000000   
+number_of_open_credit_lines_and_loans          0.049565        0.091455   
+number_of_times90_days_late                   -0.008320       -0.012743   
+number_real_estate_loans_or_lines              0.120046        0.124959   
+number_of_time60-89_days_past_due_not_worse   -0.007533       -0.011116   
+number_of_dependents                          -0.040673        0.062647   
+
+                                             number_of_open_credit_lines_and_loans  \
+serious_dlqin2yrs                                                        -0.029669   
+revolving_utilization_of_unsecured_lines                                 -0.011281   
+age                                                                       0.147705   
+number_of_time30-59_days_past_due_not_worse                              -0.055312   
+debt_ratio                                                                0.049565   
+monthly_income                                                            0.091455   
+number_of_open_credit_lines_and_loans                                     1.000000   
+number_of_times90_days_late                                              -0.079984   
+number_real_estate_loans_or_lines                                         0.433959   
+number_of_time60-89_days_past_due_not_worse                              -0.071077   
+number_of_dependents                                                      0.065322   
+
+                                             number_of_times90_days_late  \
+serious_dlqin2yrs                                               0.117175   
+revolving_utilization_of_unsecured_lines                       -0.001061   
+age                                                            -0.061005   
+number_of_time30-59_days_past_due_not_worse                     0.983603   
+debt_ratio                                                     -0.008320   
+monthly_income                                                 -0.012743   
+number_of_open_credit_lines_and_loans                          -0.079984   
+number_of_times90_days_late                                     1.000000   
+number_real_estate_loans_or_lines                              -0.045205   
+number_of_time60-89_days_past_due_not_worse                     0.992796   
+number_of_dependents                                           -0.010176   
+
+                                             number_real_estate_loans_or_lines  \
+serious_dlqin2yrs                                                    -0.007038   
+revolving_utilization_of_unsecured_lines                              0.006235   
+age                                                                   0.033150   
+number_of_time30-59_days_past_due_not_worse                          -0.030565   
+debt_ratio                                                            0.120046   
+monthly_income                                                        0.124959   
+number_of_open_credit_lines_and_loans                                 0.433959   
+number_of_times90_days_late                                          -0.045205   
+number_real_estate_loans_or_lines                                     1.000000   
+number_of_time60-89_days_past_due_not_worse                          -0.039722   
+number_of_dependents                                                  0.124684   
+
+                                             number_of_time60-89_days_past_due_not_worse  \
+serious_dlqin2yrs                                                               0.102261   
+revolving_utilization_of_unsecured_lines                                       -0.001048   
+age                                                                            -0.057159   
+number_of_time30-59_days_past_due_not_worse                                     0.987005   
+debt_ratio                                                                     -0.007533   
+monthly_income                                                                 -0.011116   
+number_of_open_credit_lines_and_loans                                          -0.071077   
+number_of_times90_days_late                                                     0.992796   
+number_real_estate_loans_or_lines                                              -0.039722   
+number_of_time60-89_days_past_due_not_worse                                     1.000000   
+number_of_dependents                                                           -0.010922   
+
+                                             number_of_dependents  
+serious_dlqin2yrs                                        0.046048  
+revolving_utilization_of_unsecured_lines                 0.001557  
+age                                                     -0.213303  
+number_of_time30-59_days_past_due_not_worse             -0.002680  
+debt_ratio                                              -0.040673  
+monthly_income                                           0.062647  
+number_of_open_credit_lines_and_loans                    0.065322  
+number_of_times90_days_late                             -0.010176  
+number_real_estate_loans_or_lines                        0.124684  
+number_of_time60-89_days_past_due_not_worse             -0.010922  
+number_of_dependents                                     1.000000  

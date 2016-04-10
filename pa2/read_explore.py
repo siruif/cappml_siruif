@@ -11,7 +11,6 @@ and histogram.
 files that will be generated.
 '''
 
-import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,11 +23,7 @@ import re
 'number_of_times90_days_late', 'number_real_estate_loans_or_lines', 
 'number_of_time60-89_days_past_due_not_worse', 'number_of_dependents']
 
-
-histogram_variables = ['age', 'number_of_dependents', 
-	'number_of_open_credit_lines_and_loans', 'monthly_income']
-
-bar_variables = ['serious_dlqin2yrs']
+NOT YET GENERATED GRAPHS FOR...
 
 ['revolving_utilization_of_unsecured_lines', 
 'number_of_time30-59_days_past_due_not_worse', 'debt_ratio', 
@@ -37,6 +32,25 @@ bar_variables = ['serious_dlqin2yrs']
 'number_of_time60-89_days_past_due_not_worse', ]
 
 '''
+# Enter the index column here.
+index_col = 0
+
+# Plot histograms, create a list of attributes' names that you
+	#want histograms for.
+histogram_variables = ['age', 'number_of_dependents', \
+	'number_of_open_credit_lines_and_loans', 'monthly_income']
+#Enter a integer for the number of bins for histograms
+bins = 15
+
+#Plot bar charts, create a list of attributes' names that you
+	#want bar charts for.
+bar_variables = ['serious_dlqin2yrs']
+
+##########################################
+                                        ##
+#PLEASE DO NOT MODIFY THE CODES BELOW.  ##
+										##
+##########################################
 
 def explore_data(input_data, output_filename): 
 	'''
@@ -59,33 +73,30 @@ def explore_data(input_data, output_filename):
 	with open(output_filename, "w") as f:
 		for summary_stats in output:
 			print(summary_stats, file = f)
+	print("Files has been saved to: output/summary_stats.txt")
 	
 	#Plot
-	print("Generating graphs...")
-
-	# Plot histograms, create a list of attributes' names that you
-	#want histograms for.
-	histogram_variables = ['age', 'number_of_dependents', \
-	'number_of_open_credit_lines_and_loans', 'monthly_income']
+	print("Generating charts...")
+	
 	for hist_var in histogram_variables:
 		plot_histogram(df, hist_var)
-
-	#Plot bar charts, create a list of attributes' names that you
-	#want bar charts for.
-	bar_variables = ['serious_dlqin2yrs']
+	
 	for bar_var in bar_variables:
 		plot_bar(df, bar_var)
+	print("Charts have been saved to output/charts")
+
+	return df
 	
 def clean_data(input_data):
 	'''
 	Convests a csv file into a df with modified column names. The first column is
 	the index number.
 	'''
-	df = pd.read_csv(input_data, index_col = 0)
+	df = pd.read_csv(input_data, index_col = index_col)
 	#df = pd.read_csv(input_data, index_col='ID', na_values = ['']) 
 	#you may define missing values as emplty cells
 	df.columns = [camel_to_snake(col) for col in df.columns]
-	#df.columns.tolist()
+	#print(df.columns)
 	return df
 
 def camel_to_snake(column_name):
@@ -130,16 +141,19 @@ def calculate_summary_stats(df, variables):
 
 		output.append('\n')
 
+	output.append("Correlation Table")
+	output.append(df.corr())
+
 	return output
 
 def plot_histogram(df, hist_var):
 	'''
 	Generate histograms for a specific column of a dataframe.
 	'''
-	fig = df[hist_var].hist(color = 'pink', bins = 15)
+	fig = df[hist_var].hist(color = 'pink', bins = bins)
 	fig.set_title('Histogram for ' + hist_var)
 	plt.draw()
-	plt.savefig('output/' + hist_var)
+	plt.savefig('output/charts/' + hist_var)
 	plt.close()
 
 def plot_bar(df, bar_var):
@@ -151,9 +165,9 @@ def plot_bar(df, bar_var):
 	fig.set_ylabel('Number of Observations') #defines y axis label
 	fig.set_title(bar_var+' Distribution') #defines graph title
 	plt.draw()
-	plt.savefig("output/"+bar_var)
+	plt.savefig("output/charts/"+bar_var)
 	plt.close('all')
 
-def go(input_data):
+def read_explore(input_data):
 	explore_data(input_data,'output/summary_stats.txt')
-
+	return clean_data(input_data)

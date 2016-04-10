@@ -5,12 +5,14 @@
 
 '''
 This file fills in the missing values with attribute's mean.
+
+*** Note: Please have a folder called output in your current directory to pick up all
+files that will be generated.
 '''
 
 from read_explore import clean_data
 import pandas as pd
 import numpy as np
-
 
 #Create a list of attributs you want to fill in missing values, a direcotry
 #for output, and a dictionary  for rounding digits after decimal.
@@ -36,8 +38,8 @@ def fill_with_mean(df):
 	df = df.round(rounding_dict)
 	df.to_csv(output_filename, mode = 'w', index_label = 'ID')
 	print("File has been saved to:", output_filename)
+	return df
 
-def fill_in_missing_values(input_data):
-	df = clean_data(input_data)
+def fill_in_missing_values(df):
 	# Fill in missing values with the mean of the values for that attribute.
-	fill_with_mean(df)
+	return fill_with_mean(df)
