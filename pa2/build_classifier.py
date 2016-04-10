@@ -21,8 +21,6 @@ def split_data(df, training_out_filename, testing_out_filename, test_size = 0.2)
 	testing size as a proportion of the entire dataset.
 	'''
 	train, test = train_test_split(df, test_size = test_size)
-	train.to_csv(training_out_filename)
-	test.to_csv(testing_out_filename)
 	return train, test
 
 def logistic_regression(df):
