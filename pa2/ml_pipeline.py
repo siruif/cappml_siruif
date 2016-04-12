@@ -11,10 +11,10 @@ graphs.
 
 import sys
 import pandas as pd
-from read_explore import read_explore
-from fill_missing import fill_in_missing_values
-from features import generate_features
-from build_classifier import build_classifier
+from _01_read_explore import read_explore
+from _02_fill_missing import fill_in_missing_values
+from _03_features import generate_features
+from _04_classify_evaluate import build_classifier
 
 
 if __name__=="__main__":
@@ -30,9 +30,6 @@ if __name__=="__main__":
     df_clean = generate_features(df)
     print()
     build_classifier(df_clean)
-
-
-
-
-
-    print("Done! Check your output folder.")
+    print()
+    print()
+    print("High Five! Check your output folder.")

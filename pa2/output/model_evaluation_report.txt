@@ -1,0 +1,9 @@
+MODEL: LOGISTIC REGRESSION
+Metrics accuracy is: 0.933066666667
+Metrics precision is: 0.612903225806
+Metrics f1 score is (1 is the best): 0.0864422202002
+
+
+
+
+-----------------------------------------------------------------------------
