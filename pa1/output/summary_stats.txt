@@ -26,7 +26,7 @@ Field Name: Age
 Mean: 17.0
 Standard Deviation: 1.46
 Median: 17.0
-Mode: 0    15
+Mode: 0    15.0
 dtype: float64
 Missing Value Count: 229
 
@@ -35,7 +35,7 @@ Field Name: GPA
 Mean: 2.99
 Standard Deviation: 0.82
 Median: 3.0
-Mode: 0    2
+Mode: 0    2.0
 dtype: float64
 Missing Value Count: 221
 
@@ -44,9 +44,9 @@ Field Name: Days_missed
 Mean: 18.01
 Standard Deviation: 9.63
 Median: 18.0
-Mode: 0     6
-1    14
-2    31
+Mode: 0     6.0
+1    14.0
+2    31.0
 dtype: float64
 Missing Value Count: 192
 
