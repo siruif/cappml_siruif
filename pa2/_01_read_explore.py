@@ -37,16 +37,24 @@ index_col = 0
 
 # Create a list of attributes' names that you
 	#want histograms for.
-histogram_variables = ['age', 'number_of_dependents', \
-	'number_of_open_credit_lines_and_loans', 'number_of_times90_days_late', ]
+histogram_variables = ['serious_dlqin2yrs', 
+'revolving_utilization_of_unsecured_lines', 'age', 
+'number_of_time30-59_days_past_due_not_worse', 'debt_ratio', 
+'monthly_income', 'number_of_open_credit_lines_and_loans', 
+'number_of_times90_days_late', 'number_real_estate_loans_or_lines', 
+'number_of_time60-89_days_past_due_not_worse', 'number_of_dependents']
+
+
+# histogram_variables = ['age', 'number_of_dependents', \
+# 	'number_of_open_credit_lines_and_loans', 'number_of_times90_days_late']
 # Create a list of attributes' names that you
 	#want take and log and plot histograms for.
+log_variables =[]
 
 # log_variables = ['revolving_utilization_of_unsecured_lines', 
 # 'number_of_time30-59_days_past_due_not_worse', 'debt_ratio', 
 # 'number_real_estate_loans_or_lines', 
 # 'number_of_time60-89_days_past_due_not_worse', 'monthly_income']
-log_variables = []
 
 #Enter a integer for the number of bins for histograms
 bins = 15
@@ -91,7 +99,8 @@ def explore_data(input_data, output_filename):
 		plot_histogram(df, hist_var)
 
 	for log_var in log_variables:
-		plot_histogram(df, log_var, log = True)
+		print("~"*77)
+		plot_histogram(df, log_var, take_log = True)
 	
 	for bar_var in bar_variables:
 		plot_bar(df, bar_var)
@@ -153,19 +162,24 @@ def calculate_summary_stats(df, variables):
 
 		output.append('\n')
 
-	output.append("Correlation Table")
-	output.append(df.corr())
+	correlation = df.corr()
+	correlation.to_csv('output/correlation.csv')
 
 	return output
 
-def plot_histogram(df, hist_var, log = False):
+def plot_histogram(df, hist_var, take_log = False):
 	'''
 	Generate histograms for a specific column of a dataframe.
+	Normalizes skewed data by taking logs of it first.
 	'''
-	if log:
-		print(hist_var)
-		hist_var = np.log(df[hist_var])
-	fig = df[hist_var].hist(color = 'pink', bins = bins)
+
+	if take_log:
+		print("Taking log...")
+		df_log_var = np.log(df[hist_var])
+
+		fig = df_log_var.hist(color = 'red', bins = bins)
+	else:
+		fig = df[hist_var].hist(color = 'pink', bins = bins)
 	fig.set_title('Histogram for ' + hist_var)
 	plt.draw()
 	plt.savefig('output/charts/' + hist_var)

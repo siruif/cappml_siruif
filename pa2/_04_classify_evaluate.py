@@ -23,8 +23,7 @@ model_evaluation_report_out_filename = 'output/model_evaluation_report.txt'
 #Enter a file name that you want to predict, leave it as an empty string if
 #you do not want to make predictions.
 testing_filename = 'cs-test.csv'
-#Enter a directory for prediction results.
-result_filename = 'output/results.csv'
+
 
 ##########################################
                                         ##
@@ -78,7 +77,6 @@ def logistic_regression(df, predict = False):
 		print()
 		print()
 		print()
-
 		print("Making Predictions...")
 		df_testing = clean_data(testing_filename)
 		df_testing = fill_in_missing_values(df_testing)
@@ -88,8 +86,8 @@ def logistic_regression(df, predict = False):
 
 		# I output the data in original format instead of the cleaned version.
 		df_testing.insert(len(df_testing.columns), 'Predicted_'+dependent_variable, predicted_y)
-		df_testing.to_csv(result_filename, mode = 'w', index_label = 'ID')
-		print("Predictions have been saved to:", result_filename)
+		df_testing.to_csv('output/logit_results.csv', mode = 'w', index_label = 'ID')
+		print("Predictions have been saved to: output/logit_results.csv")
 
 def build_classifier(df_clean):
 	if len(testing_filename) == 0:
