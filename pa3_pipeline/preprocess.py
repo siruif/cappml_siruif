@@ -118,9 +118,7 @@ def get_dummies(df, categ_var):
 	df = df.join(dummies)
 	return df
 
-
 #############################################################################
-
 
 if __name__=="__main__":
 

@@ -4,7 +4,7 @@
 
 '''
 The code is a modified version of Rayid Ghani's magicloops.
-
+Source code:
 https://github.com/rayidghani/magicloops/blob/master/magicloops.py
 '''
 
@@ -25,6 +25,8 @@ from sklearn.cross_validation import train_test_split
 from sklearn.grid_search import ParameterGrid
 from sklearn.metrics import *
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, precision_score, recall_score, \
+f1_score, roc_auc_score, precision_recall_curve
 import random
 import pylab as pl
 import matplotlib.pyplot as plt
@@ -76,27 +78,53 @@ def define_clfs_params():
     return clfs, grid
 
 def clf_loop(models_to_run,clfs,grid,X,y):
+    clf_log = dict()
 
     for n in range(1, 2):
         X_train, X_test, y_train, y_test = train_test_split(X, y, \
             test_size=0.2, random_state=0)
         for index,clf in enumerate([clfs[x] for x in models_to_run]):
+            start_time = time.time()
             print(models_to_run[index])
             parameter_values = grid[models_to_run[index]]
             for p in ParameterGrid(parameter_values):
                 try:
                     clf.set_params(**p)
                     print(clf)
-                    y_pred_probs = clf.fit(X_train, y_train).predict_proba(X_test)[:,1]
+                    y_pred_probs = \
+                    clf.fit(X_train, y_train).predict_proba(X_test)[:,1]
                     #threshold = np.sort(y_pred_probs)[::-1][int(.05*len(y_pred_probs))]
                     #print (threshold)
+                    end_time=time.time()
+                    print("Time being used:",end_time-start_time)
                     print (precision_at_k(y_test,y_pred_probs,.05))
                     #plot_precision_recall_n(y_test,y_pred_probs,clf)
+                    clf_log[clf] = dict()
+                    clf_log[clf]['evaluation'] = evaluate(y_test, y_pred_probs)
+                    clf_log[clf]['time'] = round(end_time - start_time,2)
+                    print()
                 except IndexError as e:
                     print ('Error:',e)
                     continue
+    print("~"*101)
+    print(clf_log)
+    return clf_log
 
+def evaluate(y_true, y_predict):
+    evaluation = dict()
 
+    try:
+        evaluation['accuracy'] = accuracy_score(y_true, y_predict)
+        evaluation['precision'] = precision_score(y_true, y_predict)
+        evaluation['recall'] = recall_score(y_true, y_predict)
+        evaluation['f1'] = f1_score(y_true, y_predict)
+        evaluation['area_under_curve'] = roc_auc_score(y_true, y_predict),
+        evaluation['precision_at_k'] = precision_at_k(y_true,y_predict, 0.05)
+
+    except:
+        print("No metrics.")
+
+    return evaluation
 
 def plot_precision_recall_n(y_true, y_prob, model_name):
     from sklearn.metrics import precision_recall_curve
@@ -136,6 +164,27 @@ def get_y_x(df):
     df.drop('SeriousDlqin2yrs', axis = 1, inplace = True)
     return y, df
 
+def output_clf_log(clf_log):
+    with open('output/results.csv','w') as outfile:
+        writer = csv.DictWriter(outfile, fieldnames = ['clf', \
+                'time', 'accuracy', 'precision', 'recall', 'f1', \
+                'area_under_curve', 'precision_at_k'])
+        writer.writeheader()
+
+        for k in clf_log:
+            try:
+                writer.writerow({'clf': k, 
+                    'time': clf_log[k]['time'], 
+                    'accuracy': clf_log[k]['evaluation']['accuracy'], 
+                    'precision': clf_log[k]['evaluation']['precision'], 
+                    'recall': clf_log[k]['evaluation']['recall'], 
+                    'f1': clf_log[k]['evaluation']['f1'], 
+                    'area_under_curve': clf_log[k]['evaluation']['area_under_curve'], 
+                    'precision_at_k': clf_log[k]['evaluation']['precision_at_k']})
+            except:
+                print("Error")
+
+
 def main(filename): 
     clfs,grid = define_clfs_params()
     models_to_run=['KNN','RF','LR','ET','AB','GB','NB','DT']
@@ -144,8 +193,7 @@ def main(filename):
     df = pd.read_csv(filename, index_col = 0)
     y, X = get_y_x(df)
 
-    clf_loop(models_to_run,clfs,grid,X,y)
-
+    clf_log = clf_loop(models_to_run,clfs,grid,X,y)
 
 if __name__ == '__main__':
     main('training_cleaned.csv')

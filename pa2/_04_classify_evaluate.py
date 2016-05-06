@@ -14,6 +14,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import cross_val_score
 from sklearn import metrics
 
+# MODEL SELECTION AND VALIDATION: 
+#create a df for classifiers evaluations for later use
+
 #Enter your dependent variable/the variable you want to create label for.
 dependent_variable = 'serious_dlqin2yrs'
 #Enter a test size
