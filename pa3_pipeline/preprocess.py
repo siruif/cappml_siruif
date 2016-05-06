@@ -5,6 +5,7 @@
 import sys
 import pandas as pd
 import numpy as np
+from numpy import nan
 import matplotlib.pyplot as plt
 
 ######################## STEP 1 READ AND EXPLORE ########################
@@ -15,6 +16,8 @@ def read_data(input_data):
 	is the index number.
 	'''
 	df = pd.read_csv(input_data, index_col = 0)
+
+	df = df.replace({'age':{0:nan},'NumberOfTime30-59DaysPastDueNotWorse': {98: nan, 97:nan, 96:nan}, 'NumberOfTimes90DaysLate':{98: nan, 97:nan, 96:nan}, 'NumberOfTime60-89DaysPastDueNotWorse':{98: nan, 97:nan, 96:nan}, 'NumberOfDependents':{20:nan}})
 	return df
 
 def calculate_summary_stats(df):
@@ -129,7 +132,7 @@ def log_attr(df,attr):
 if __name__=="__main__":
 
     input_data = '../pa2/cs-training.csv'
-    output_data = 'training_cleaned.csv'
+    output_data = 'training_cleaned_1.csv'
 
     df = read_data(input_data)
     df_original = df.copy()

@@ -51,12 +51,12 @@ def define_clfs_params():
 
     grid = { 
     'RF':{'n_estimators': [1,10,100], 'max_depth': [1,5,10,20], 'max_features': ['sqrt','log2'], 'min_samples_split': [2,5,10]},
-    'LR': { 'penalty': ['l1','l2'], 'C': [0.00001,0.0001,0.001,0.01,0.1,1]},
+    'LR': { 'penalty': ['l1','l2'], 'C': [0.00001,0.0001,0.001,0.01,0.1]},
     'GB': {'n_estimators': [1,10,100,1000], 'learning_rate' : [0.001,0.01,0.05,0.1,0.5], 'subsample' : [0.1,0.5], 'max_depth': [1,3,5,10,20]},
     'NB' : {},
     'DT': {'criterion': ['gini', 'entropy'], 'max_depth': [1,5,10,20,50], 'max_features': ['sqrt','log2'],'min_samples_split': [2,5,10]},
     'SVM' :{'C' :[0.00001,0.0001,0.001,0.01,0.1,1],'penalty':['l1','l2']},
-    'KNN' :{'n_neighbors': [1,5,10,25,50],'weights': ['uniform','distance'], 'algorithm': ['auto','ball_tree','kd_tree']}
+    'KNN' :{'n_neighbors': [1,5,10,25],'weights': ['uniform','distance'], 'algorithm': ['ball_tree']}
            }
 
     return clfs, grid
@@ -67,13 +67,15 @@ def clf_loop(models_to_run,clfs,grid,X,y):
     best_params = ''
     best_auc = -1
 
+
     with open ('output/results.csv', 'w') as csvfile:
         w = csv.writer(csvfile, delimiter=',')
-        w.writerow(['Classification_Model', 'Parameters', 'auc'])
+        w.writerow(['Classification_Model', 'Parameters', 'auc', 'time'])
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, \
             test_size=0.2, random_state=0)
         for index,clf in enumerate([clfs[x] for x in models_to_run]):
+            
             current_model = models_to_run[index]
             current_params = grid[current_model]
 
@@ -81,7 +83,6 @@ def clf_loop(models_to_run,clfs,grid,X,y):
             print(models_to_run[index])
             parameter_values = grid[models_to_run[index]]
             for p in ParameterGrid(parameter_values):
-                best_params_auc = -1
                 try:
                     clf.set_params(**p)
                     print(clf)
@@ -94,18 +95,21 @@ def clf_loop(models_to_run,clfs,grid,X,y):
                     #print (precision_at_k(y_test,y_pred_probs,.05))
                     #plot_precision_recall_n(y_test,y_pred_probs,clf)
                     current_auc = roc_auc_score(y_test, y_pred_probs)
+
                     if current_auc > best_auc:
                         best_model = current_model
                         best_params = current_params
+                        best_pred_y = y_pred_probs
                     print("AUC:",current_auc)
                     print()
                 except IndexError as e:
                     print ('Error:',e)
                     continue
-                w.writerow([current_model, clf, current_auc])
+                w.writerow([current_model, clf, current_auc, end_time-start_time])
+    plot_precision_recall_n(y_test, y_pred_probs, best_model)
     print("~"*101)
     print(best_model,best_params, best_auc)
-    return best_model, best_params, best_auc
+    return best_model, best_params, best_auc, best_pred_y
 
 def evaluate(y_true, y_predict):
     evaluation = dict()
@@ -162,36 +166,37 @@ def get_y_x(df):
     return y, df
 
 
-def output_clf_log(clf_log):
-    with open('output/results.csv','w') as outfile:
-        writer = csv.DictWriter(outfile, fieldnames = ['clf', \
-                'time', 'accuracy', 'precision', 'recall', 'f1', \
-                'area_under_curve', 'precision_at_k'])
-        writer.writeheader()
+# def output_clf_log(clf_log):
+#     with open('output/results.csv','w') as outfile:
+#         writer = csv.DictWriter(outfile, fieldnames = ['clf', \
+#                 'time', 'accuracy', 'precision', 'recall', 'f1', \
+#                 'area_under_curve', 'precision_at_k'])
+#         writer.writeheader()
 
-        for k in clf_log:
-            try:
-                writer.writerow({'clf': k, 
-                    'time': clf_log[k]['time'], 
-                    'accuracy': clf_log[k]['evaluation']['accuracy'], 
-                    'precision': clf_log[k]['evaluation']['precision'], 
-                    'recall': clf_log[k]['evaluation']['recall'], 
-                    'f1': clf_log[k]['evaluation']['f1'], 
-                    'area_under_curve': clf_log[k]['evaluation']['area_under_curve'], 
-                    'precision_at_k': clf_log[k]['evaluation']['precision_at_k']})
-            except:
-                print("Error")
+#         for k in clf_log:
+#             try:
+#                 writer.writerow({'clf': k, 
+#                     'time': clf_log[k]['time'], 
+#                     'accuracy': clf_log[k]['evaluation']['accuracy'], 
+#                     'precision': clf_log[k]['evaluation']['precision'], 
+#                     'recall': clf_log[k]['evaluation']['recall'], 
+#                     'f1': clf_log[k]['evaluation']['f1'], 
+#                     'area_under_curve': clf_log[k]['evaluation']['area_under_curve'], 
+#                     'precision_at_k': clf_log[k]['evaluation']['precision_at_k']})
+#             except:
+#                 print("Error")
 
 
 def main(filename): 
     clfs,grid = define_clfs_params()
-    models_to_run=['KNN','RF','LR','GB','NB','DT']
+    models_to_run=['KNN', 'RF', 'LR', 'GB','NB','DT']
 
     #get X and y
     df = pd.read_csv(filename, index_col = 0)
     y, X = get_y_x(df)
 
-    clf_log = clf_loop(models_to_run,clfs,grid,X,y)
+    best_model, best_params, best_auc, best_pred_y = clf_loop(models_to_run,clfs,grid,X,y)
+    plot_precision_recall_n(y, )
 
 if __name__ == '__main__':
     main('training_cleaned.csv')
