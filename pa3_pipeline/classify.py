@@ -36,41 +36,46 @@ import time
 
 def define_clfs_params():
 
+    # clfs = {'RF': RandomForestClassifier(n_estimators=50, n_jobs=-1),
+    #     'ET': ExtraTreesClassifier(n_estimators=10, n_jobs=-1, \
+    #         criterion='entropy'),
+    #     'AB': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), \
+    #         algorithm="SAMME", n_estimators=200),
+    #     'LR': LogisticRegression(penalty='l1', C=1e5),
+    #     'SVM': svm.SVC(kernel='linear', probability=True, random_state=0),
+    #     'GB': GradientBoostingClassifier(learning_rate=0.05, subsample=0.5, \
+    #         max_depth=6, n_estimators=10),
+    #     'NB': GaussianNB(),
+    #     'DT': DecisionTreeClassifier(),
+    #     'SGD': SGDClassifier(loss="hinge", penalty="l2"),
+    #     'KNN': KNeighborsClassifier(n_neighbors=3) 
+    #         }
+
     clfs = {'RF': RandomForestClassifier(n_estimators=50, n_jobs=-1),
-        'ET': ExtraTreesClassifier(n_estimators=10, n_jobs=-1, \
-            criterion='entropy'),
-        'AB': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), \
-            algorithm="SAMME", n_estimators=200),
+        
+        
         'LR': LogisticRegression(penalty='l1', C=1e5),
-        'SVM': svm.SVC(kernel='linear', probability=True, random_state=0),
         'GB': GradientBoostingClassifier(learning_rate=0.05, subsample=0.5, \
             max_depth=6, n_estimators=10),
         'NB': GaussianNB(),
         'DT': DecisionTreeClassifier(),
-        'SGD': SGDClassifier(loss="hinge", penalty="l2"),
-        'KNN': KNeighborsClassifier(n_neighbors=3) 
+        'SVM': svm.LinearSVC(random_state=0, dual = False),
+        'KNN': KNeighborsClassifier(n_neighbors=5) 
             }
 
     grid = { 
-    'RF':{'n_estimators': [1,10,100,1000,10000], \
-    'max_depth': [1,5,10,20,50,100], \
+    'RF':{'n_estimators': [1,10,100], \
+    'max_depth': [1,5,10,20,50], \
     'max_features': ['sqrt','log2'], \
     'min_samples_split': [2,5,10]},
-    'LR': { 'penalty': ['l1','l2'], 'C': [0.00001,0.0001,0.001,0.01,0.1,1,10]},
-    'SGD': { 'loss': ['hinge','log','perceptron'], \
-    'penalty': ['l2','l1','elasticnet']},
-    'ET': { 'n_estimators': [1,10,100,1000,10000], \
-    'criterion' : ['gini', 'entropy'] ,'max_depth': [1,5,10,20,50,100], \
-    'max_features': ['sqrt','log2'],'min_samples_split': [2,5,10]},
-    'AB': { 'algorithm': ['SAMME', 'SAMME.R'], \
-    'n_estimators': [1,10,100,1000,10000]},
+    'LR': { 'penalty': ['l1','l2'], 'C': [0.00001,0.0001,0.001,0.01,0.1,1]},
     'GB': {'n_estimators': [1,10,100,1000,10000], \
     'learning_rate' : [0.001,0.01,0.05,0.1,0.5], \
     'subsample' : [0.1,0.5,1.0], 'max_depth': [1,3,5,10,20,50,100]},
     'NB' : {},
     'DT': {'criterion': ['gini', 'entropy'], 'max_depth': [1,5,10,20,50,100], \
     'max_features': ['sqrt','log2'],'min_samples_split': [2,5,10]},
-    'SVM' :{'C' :[0.00001,0.0001,0.001,0.01,0.1,1,10],'kernel':['linear']},
+    'SVM' :{'C' :[0.00001,0.0001,0.001,0.01,0.1,1],'penalty':['l1','l2']},
     'KNN' :{'n_neighbors': [1,5,10,25,50,100],'weights': ['uniform','distance'], \
     'algorithm': ['auto','ball_tree','kd_tree']}
            }
@@ -96,7 +101,7 @@ def clf_loop(models_to_run,clfs,grid,X,y):
                     #threshold = np.sort(y_pred_probs)[::-1][int(.05*len(y_pred_probs))]
                     #print (threshold)
                     end_time=time.time()
-                    print("Time being used:",end_time-start_time)
+                    print(models_to_run[index], "used:",end_time-start_time)
                     print (precision_at_k(y_test,y_pred_probs,.05))
                     #plot_precision_recall_n(y_test,y_pred_probs,clf)
                     clf_log[clf] = dict()
