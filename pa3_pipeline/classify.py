@@ -31,6 +31,7 @@ import random
 import pylab as pl
 import matplotlib.pyplot as plt
 from scipy import optimize
+import csv
 import time
 
 
@@ -49,49 +50,62 @@ def define_clfs_params():
             }
 
     grid = { 
-    'RF':{'n_estimators': [1,10,100], 'max_depth': [1,5,10,20,50], 'max_features': ['sqrt','log2'], 'min_samples_split': [2,5,10]},
+    'RF':{'n_estimators': [1,10,100], 'max_depth': [1,5,10,20], 'max_features': ['sqrt','log2'], 'min_samples_split': [2,5,10]},
     'LR': { 'penalty': ['l1','l2'], 'C': [0.00001,0.0001,0.001,0.01,0.1,1]},
-    'GB': {'n_estimators': [1,10,100,1000,10000], 'learning_rate' : [0.001,0.01,0.05,0.1,0.5], 'subsample' : [0.1,0.5,1.0], 'max_depth': [1,3,5,10,20,50,100]},
+    'GB': {'n_estimators': [1,10,100,1000], 'learning_rate' : [0.001,0.01,0.05,0.1,0.5], 'subsample' : [0.1,0.5], 'max_depth': [1,3,5,10,20]},
     'NB' : {},
-    'DT': {'criterion': ['gini', 'entropy'], 'max_depth': [1,5,10,20,50,100], 'max_features': ['sqrt','log2'],'min_samples_split': [2,5,10]},
+    'DT': {'criterion': ['gini', 'entropy'], 'max_depth': [1,5,10,20,50], 'max_features': ['sqrt','log2'],'min_samples_split': [2,5,10]},
     'SVM' :{'C' :[0.00001,0.0001,0.001,0.01,0.1,1],'penalty':['l1','l2']},
-    'KNN' :{'n_neighbors': [1,5,10,25,50,100],'weights': ['uniform','distance'], 'algorithm': ['auto','ball_tree','kd_tree']}
+    'KNN' :{'n_neighbors': [1,5,10,25,50],'weights': ['uniform','distance'], 'algorithm': ['auto','ball_tree','kd_tree']}
            }
 
     return clfs, grid
 
 def clf_loop(models_to_run,clfs,grid,X,y):
-    clf_log = dict()
 
-    for n in range(1, 2):
+    best_model = ''
+    best_params = ''
+    best_auc = -1
+
+    with open ('output/results.csv', 'w') as csvfile:
+        w = csv.writer(csvfile, delimiter=',')
+        w.writerow(['Classification_Model', 'Parameters', 'auc'])
+
         X_train, X_test, y_train, y_test = train_test_split(X, y, \
             test_size=0.2, random_state=0)
         for index,clf in enumerate([clfs[x] for x in models_to_run]):
+            current_model = models_to_run[index]
+            current_params = grid[current_model]
+
             start_time = time.time()
             print(models_to_run[index])
             parameter_values = grid[models_to_run[index]]
             for p in ParameterGrid(parameter_values):
+                best_params_auc = -1
                 try:
                     clf.set_params(**p)
                     print(clf)
                     y_pred_probs = \
                     clf.fit(X_train, y_train).predict_proba(X_test)[:,1]
-                    #threshold = np.sort(y_pred_probs)[::-1][int(.05*len(y_pred_probs))]
+                    threshold = np.sort(y_pred_probs)[::-1][int(.05*len(y_pred_probs))]
                     #print (threshold)
                     end_time=time.time()
                     print(models_to_run[index], "used:",end_time-start_time)
-                    print (precision_at_k(y_test,y_pred_probs,.05))
+                    #print (precision_at_k(y_test,y_pred_probs,.05))
                     #plot_precision_recall_n(y_test,y_pred_probs,clf)
-                    clf_log[clf] = dict()
-                    clf_log[clf]['evaluation'] = evaluate(y_test, y_pred_probs)
-                    clf_log[clf]['time'] = round(end_time - start_time,2)
+                    current_auc = roc_auc_score(y_test, y_pred_probs)
+                    if current_auc > best_auc:
+                        best_model = current_model
+                        best_params = current_params
+                    print("AUC:",current_auc)
                     print()
                 except IndexError as e:
                     print ('Error:',e)
                     continue
+                w.writerow([current_model, clf, current_auc])
     print("~"*101)
-    print(clf_log)
-    return clf_log
+    print(best_model,best_params, best_auc)
+    return best_model, best_params, best_auc
 
 def evaluate(y_true, y_predict):
     evaluation = dict()
@@ -146,6 +160,7 @@ def get_y_x(df):
     y = df['SeriousDlqin2yrs']
     df.drop('SeriousDlqin2yrs', axis = 1, inplace = True)
     return y, df
+
 
 def output_clf_log(clf_log):
     with open('output/results.csv','w') as outfile:

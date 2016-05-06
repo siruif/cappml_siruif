@@ -118,6 +118,12 @@ def get_dummies(df, categ_var):
 	df = df.join(dummies)
 	return df
 
+def log_attr(df,attr):
+    log_attr ='log_' + attr
+    df[log_attr] = np.log1p(df[attr])
+    df.drop(attr, axis=1, inplace = True)
+    return df
+
 #############################################################################
 
 if __name__=="__main__":
@@ -140,4 +146,5 @@ if __name__=="__main__":
     	value = impute_missing_values(df, missing_var, 'mean')
     	df = replace_missing_values(df,missing_var, value)
 
+    df = log_attr(df,'MonthlyIncome')
     df.to_csv(output_data)
