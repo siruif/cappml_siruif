@@ -196,7 +196,6 @@ def main(filename):
     y, X = get_y_x(df)
 
     best_model, best_params, best_auc, best_pred_y = clf_loop(models_to_run,clfs,grid,X,y)
-    plot_precision_recall_n(y, )
 
 if __name__ == '__main__':
     main('training_cleaned.csv')
