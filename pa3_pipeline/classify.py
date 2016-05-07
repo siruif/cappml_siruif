@@ -165,28 +165,6 @@ def get_y_x(df):
     df.drop('SeriousDlqin2yrs', axis = 1, inplace = True)
     return y, df
 
-
-# def output_clf_log(clf_log):
-#     with open('output/results.csv','w') as outfile:
-#         writer = csv.DictWriter(outfile, fieldnames = ['clf', \
-#                 'time', 'accuracy', 'precision', 'recall', 'f1', \
-#                 'area_under_curve', 'precision_at_k'])
-#         writer.writeheader()
-
-#         for k in clf_log:
-#             try:
-#                 writer.writerow({'clf': k, 
-#                     'time': clf_log[k]['time'], 
-#                     'accuracy': clf_log[k]['evaluation']['accuracy'], 
-#                     'precision': clf_log[k]['evaluation']['precision'], 
-#                     'recall': clf_log[k]['evaluation']['recall'], 
-#                     'f1': clf_log[k]['evaluation']['f1'], 
-#                     'area_under_curve': clf_log[k]['evaluation']['area_under_curve'], 
-#                     'precision_at_k': clf_log[k]['evaluation']['precision_at_k']})
-#             except:
-#                 print("Error")
-
-
 def main(filename): 
     clfs,grid = define_clfs_params()
     models_to_run=['KNN', 'RF', 'LR', 'GB','NB','DT']
